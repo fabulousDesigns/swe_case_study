@@ -20,4 +20,8 @@ A simple FastAPI service for managing customers and orders.
 
 ## Setup
 
-![Here is the setup video](https://drive.google.com/file/d/1GXwwzTGpCHKAZCiCvlqGTusLwunTd1Xz/view?usp=drive_link)
+[Here is the setup video](https://drive.google.com/file/d/1GXwwzTGpCHKAZCiCvlqGTusLwunTd1Xz/view?usp=drive_link)
+
+## Screenshot
+
+![sms](./screenshots/sms.jpg)
