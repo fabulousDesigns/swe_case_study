@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: tech_for_all_db
+      POSTGRES_USER: super_user_tech
+      POSTGRES_PASSWORD: 12345678
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - tech_network
+
+  app:
+    image: bunny10/case_study:latest
+    depends_on:
+      - db
+    ports:
+      - "80:8001"
+    networks:
+      - tech_network
+    environment:
+      DATABASE_URL: postgres://super_user_tech:12345678@db:5432/tech_for_all_db
+
+networks:
+  tech_network:
+
+volumes:
+  postgres_data:

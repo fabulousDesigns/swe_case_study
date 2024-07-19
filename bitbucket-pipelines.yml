@@ -1,0 +1,58 @@
+image: python:3.12
+
+pipelines:
+  default:
+    - step:
+        name: Install dependencies
+        caches:
+          - pip
+        script:
+          - echo "Installing dependencies & Running tests..."
+          - python -m pip install --upgrade pip
+          - pip install -r requirements.txt
+          - echo "Dependencies installed."
+          - echo "Running tests..."
+          - pytest tests/
+          - echo "Tests passed."
+
+    # - step:
+    #     name: Run tests
+    #     script:
+    #       - echo "Running tests..."
+    #       - pytest tests/
+    #       - echo "Tests passed."
+
+    - step:
+        name: Build and push Docker image
+        services:
+          - docker
+        script:
+          - echo "Building and pushing Docker image..."
+          - docker build -t bunny10/case_study:latest .
+          - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          - docker push bunny10/case_study:latest
+          - echo "Docker image built and pushed."
+
+    - step:
+        name: Deploying to production
+        deployment: production
+        script:
+          - pipe: atlassian/ssh-run:0.4.0
+            variables:
+              SSH_USER: $SSH_USER
+              SERVER: $SERVER
+              SSH_KEY: $BITBUCKET_SSH_KEY
+              COMMAND: |
+                cd /home/adolf_rizler/case_study
+                echo $DOCKER_PASSWORD | sudo docker login -u $DOCKER_USERNAME --password-stdin
+                docker-compose pull
+                docker-compose down
+                docker-compose up -d
+
+definitions:
+  caches:
+    pip: ~/.cache/pip
+
+  services:
+    docker:
+      memory: 2048
