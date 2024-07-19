@@ -25,3 +25,8 @@ A simple FastAPI service for managing customers and orders.
 ## Screenshot
 
 ![sms](./screenshots/sms.jpg)
+
+## Credits
+
+- mainabenpro@gmail.com
+- +254110026199
